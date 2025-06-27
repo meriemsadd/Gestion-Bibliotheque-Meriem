@@ -9,26 +9,62 @@ from bibliotheque import Livre, Membre
 class BibliothequeGUI(tk.Tk):
     def __init__(self, biblio):
         super().__init__()
-        self.title(" GESTION BIBLIOTHÈQUE MERIEM ")
+        self.title("📚 GESTION BIBLIOTHÈQUE MERIEM 📚")
         self.geometry("1200x800")
-        self.configure(bg="#e5f0f9")
+        self.configure(bg="#f0f4f8")
+
         lbl_titre = tk.Label(
             self,
             text="📚 GESTION BIBLIOTHÈQUE MERIEM 📚",
-            font=("Helvetica", 28, "bold"),
-            fg="#FFFFFF",
-            bg="#1d5492"
-    )
-        lbl_titre.pack(pady=20)
+            font=("Segoe UI", 30, "bold"),
+            fg="#2c3e50",
+            bg="#f0f4f8",
+            pady=10
+        )
+        lbl_titre.pack(pady=(20, 10))
 
         style = ttk.Style(self)
         style.theme_use("clam")
-        style.configure("TButton", font=("Helvetica", 14, "bold"), background="#0f659f", foreground="white", padding=10)
-        style.map("TButton", background=[("active", "#1f5c83")])
-        style.configure("Treeview.Heading", font=("Helvetica", 14, "bold"), background="#d0e0f0")
-        style.configure("Treeview", font=("Helvetica", 13))
-        style.configure("TLabel", font=("Helvetica", 14))
-        style.configure("TEntry", font=("Helvetica", 13))
+
+        # Style des onglets du notebook : texte plus grand et couleur
+        style.configure("TNotebook.Tab",
+                        font=("Segoe UI", 16, "bold"),
+                        padding=[20, 10],
+                        foreground="#1a237e")  # bleu foncé
+        style.map("TNotebook.Tab",
+                  foreground=[("selected", "#0d47a1")],
+                  background=[("selected", "#bbdefb")])
+
+        # Style des boutons
+        style.configure("TButton",
+                        font=("Segoe UI", 13, "bold"),
+                        background="#3498db",
+                        foreground="white",
+                        padding=10,
+                        relief="flat")
+        style.map("TButton",
+                  background=[("active", "#2980b9")])
+
+        # Style Treeview
+        style.configure("Treeview.Heading",
+                        font=("Segoe UI", 14, "bold"),
+                        background="#d6eaf8",
+                        foreground="#2c3e50")
+        style.configure("Treeview",
+                        font=("Segoe UI", 12),
+                        background="#ffffff",
+                        foreground="#34495e",
+                        fieldbackground="#ecf0f1")
+
+        # Style Labels
+        style.configure("TLabel",
+                        font=("Segoe UI", 13),
+                        background="#f0f4f8",
+                        foreground="#34495e")
+
+        # Style Entrées
+        style.configure("TEntry",
+                        font=("Segoe UI", 12))
 
         self.biblio = biblio
 
@@ -82,6 +118,19 @@ class BibliothequeGUI(tk.Tk):
         btn_ajouter = ttk.Button(frm_ajout, text="➕ Ajouter Livre", command=self.ajouter_livre)
         btn_ajouter.grid(row=1, column=len(labels), padx=15)
 
+    def afficher_livres(self):
+        for item in self.tree_livres.get_children():
+            self.tree_livres.delete(item)
+        for livre in self.biblio.liste_livres:
+            self.tree_livres.insert('', 'end', values=(
+                livre.ISBN,
+                livre.titre,
+                livre.auteur,
+                livre.annee,
+                livre.genre,
+                livre.statut
+            ))
+
     def ajouter_livre(self):
         isbn = self.entries_livre["isbn"].get().strip()
         titre = self.entries_livre["titre"].get().strip()
@@ -124,12 +173,6 @@ class BibliothequeGUI(tk.Tk):
             except Exception as e:
                 messagebox.showerror("Erreur", str(e))
 
-    def afficher_livres(self):
-        for i in self.tree_livres.get_children():
-            self.tree_livres.delete(i)
-        for livre in self.biblio.liste_livres:
-            self.tree_livres.insert('', 'end', values=(livre.ISBN, livre.titre, livre.auteur, livre.annee, livre.genre, livre.statut))
-
     # --- Onglet Membres ---
     def construire_onglet_membres(self):
         colonnes = ("ID", "Nom", "Livres empruntés")
@@ -161,6 +204,13 @@ class BibliothequeGUI(tk.Tk):
 
         btn_ajouter = ttk.Button(frm_ajout, text="➕ Ajouter Membre", command=self.ajouter_membre)
         btn_ajouter.grid(row=1, column=2, padx=15)
+
+    def afficher_membres(self):
+        for item in self.tree_membres.get_children():
+            self.tree_membres.delete(item)
+        for membre in self.biblio.liste_membres:
+            emprunts = ", ".join(membre.livres_empruntes) if hasattr(membre, "livres_empruntes") and membre.livres_empruntes else "-"
+            self.tree_membres.insert('', 'end', values=(membre.id, membre.nom, emprunts))
 
     def ajouter_membre(self):
         id_membre = self.entry_id_membre.get().strip()
@@ -201,13 +251,6 @@ class BibliothequeGUI(tk.Tk):
                 self.afficher_membres()
             except Exception as e:
                 messagebox.showerror("Erreur", str(e))
-
-    def afficher_membres(self):
-        for i in self.tree_membres.get_children():
-            self.tree_membres.delete(i)
-        for membre in self.biblio.liste_membres:
-            emprunts = ", ".join(membre.livres_empruntes) if hasattr(membre, "livres_empruntes") and membre.livres_empruntes else "-"
-            self.tree_membres.insert('', 'end', values=(membre.id, membre.nom, emprunts))
 
     # --- Onglet Emprunts ---
     def construire_onglet_emprunts(self):
@@ -256,7 +299,6 @@ class BibliothequeGUI(tk.Tk):
 
     # --- Onglet Statistiques ---
     def construire_onglet_stats(self):
-        # Scrollable frame pour stats
         canvas = tk.Canvas(self.tab_stats)
         scrollbar = ttk.Scrollbar(self.tab_stats, orient="vertical", command=canvas.yview)
         scrollable_frame = ttk.Frame(canvas)
@@ -265,13 +307,14 @@ class BibliothequeGUI(tk.Tk):
             "<Configure>",
             lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
         )
+
         canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
         canvas.configure(yscrollcommand=scrollbar.set)
 
         canvas.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="right", fill="y")
 
-        # --- 1. Statut des livres (barres) ---
+        # Statut des livres
         fig1, ax1 = plt.subplots(figsize=(6, 4))
         statuses = [livre.statut for livre in self.biblio.liste_livres]
         counts_status = {stat: statuses.count(stat) for stat in set(statuses)}
@@ -281,28 +324,26 @@ class BibliothequeGUI(tk.Tk):
         ax1.tick_params(axis='x', labelrotation=0, labelsize=12)
         ax1.tick_params(axis='y', labelsize=12)
         fig1.tight_layout()
-
         canvas1 = FigureCanvasTkAgg(fig1, master=scrollable_frame)
         canvas1.draw()
         canvas1.get_tk_widget().pack(pady=15)
 
-        # --- 2. Nombre de livres par genre (barres) ---
+        # Nombre de livres par genre
         fig2, ax2 = plt.subplots(figsize=(6, 4))
         genres = [livre.genre for livre in self.biblio.liste_livres]
         counts_genre = {genre: genres.count(genre) for genre in set(genres)}
-        couleurs = plt.cm.Paired.colors  # palette
+        couleurs = plt.cm.Paired.colors
         ax2.bar(counts_genre.keys(), counts_genre.values(), color=couleurs[:len(counts_genre)])
         ax2.set_title("Nombre de livres par genre", fontsize=16, fontweight='bold')
         ax2.set_ylabel("Nombre", fontsize=14)
         ax2.tick_params(axis='x', rotation=45, labelsize=12)
         ax2.tick_params(axis='y', labelsize=12)
         fig2.tight_layout()
-
         canvas2 = FigureCanvasTkAgg(fig2, master=scrollable_frame)
         canvas2.draw()
         canvas2.get_tk_widget().pack(pady=15)
 
-        # --- 3. Nombre de membres par nombre d'emprunts (barres) ---
+        # Nombre de membres par nombre d'emprunts
         fig3, ax3 = plt.subplots(figsize=(6, 4))
         emprunt_counts = {}
         for membre in self.biblio.liste_membres:
@@ -317,12 +358,11 @@ class BibliothequeGUI(tk.Tk):
         ax3.tick_params(axis='x', labelsize=12)
         ax3.tick_params(axis='y', labelsize=12)
         fig3.tight_layout()
-
         canvas3 = FigureCanvasTkAgg(fig3, master=scrollable_frame)
         canvas3.draw()
         canvas3.get_tk_widget().pack(pady=15)
 
-        # --- 4. Répartition des genres (camembert) ---
+        # Répartition des genres (camembert)
         fig4, ax4 = plt.subplots(figsize=(6, 4))
         if counts_genre:
             ax4.pie(
@@ -336,9 +376,7 @@ class BibliothequeGUI(tk.Tk):
             ax4.set_title("Répartition des genres", fontsize=16, fontweight='bold')
         else:
             ax4.text(0.5, 0.5, "Pas de données", ha='center', va='center', fontsize=14)
-
         fig4.tight_layout()
-
         canvas4 = FigureCanvasTkAgg(fig4, master=scrollable_frame)
         canvas4.draw()
         canvas4.get_tk_widget().pack(pady=15)

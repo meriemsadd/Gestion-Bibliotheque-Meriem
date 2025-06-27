@@ -16,7 +16,7 @@ def camembert(livres):
   valeurs=list(genres.values())#la valeur de chauqe livre pour chaque genre
         
 #dessin camembert 
-  plt.pie(valeurs,labels=labels)
+  plt.pie(valeurs, labels=labels, autopct='%1.1f%%', colors=plt.cm.tab20.colors)
   plt.title("Repartition des livres par genre")
   plt.axis("equal")
 #sauvegarder
@@ -52,11 +52,12 @@ def top_auteurs(livres):
   plt.savefig(chemin_complet)
   plt.show()
 
-def courbe_emprunts(filename="../data/historique.csv"):  
+def courbe_emprunts():
   emprunts_par_jour=Counter()#un compteur des emprunts par jouur
-
+  chemin = os.path.join(os.path.dirname(__file__), "..", "data", "historique.csv")
+ 
   try:
-    with open(filename,"r") as f :
+    with open(chemin, "r", encoding="utf-8") as f:
       lecteur=csv.reader(f,delimiter=";")
       for ligne in lecteur:
         date_str,ISBN , id, action = ligne#une ligne contient ces 4 partie separé par ;

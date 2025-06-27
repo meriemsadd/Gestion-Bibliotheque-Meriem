@@ -1,0 +1,4 @@
+# requirements.txt pour Gestion Bibliothèque Meriem
+
+matplotlib>=3.0.0
+

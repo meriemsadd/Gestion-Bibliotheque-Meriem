@@ -1,12 +1,11 @@
 1;Saddouki;3,9
-2;Meriem;
+2;Meriem;2
 3;Asmae;7
 4;Yassine;6
 5;Nour;
 6;Salma;2
 8;Khadija;5
 9;Hassan;
-10;Omar;1,4
 12;hafsa;
 13;mimi;
 11;hasnae;

@@ -1,9 +1,9 @@
-2;Atomic Habit;Yuval Noah Harari;2015;Histoire;disponible
+2;Atomic Habit;Yuval Noah Harari;2015;Histoire;emprunté
 3;Harry Potter et la Chambre des Secrets;J.K. Rowling;1998;Fantasy;emprunté
 4;Les Misérables;Antoine de Saint-Exupéry;1943;Conte;disponible
 5;L'Étranger;Albert Camus;1942;Roman;disponible
-6;Le Petit Prince;Antoine de Saint-Exupéry;1943;Conte;disponible
 7;La Peste;Albert Camus;1947;Roman;emprunté
 8;The Alchemist;Paulo Coelho;1988;Philosophie;disponible
 11;Forty rules of love ;elif chafak;1900;romance sofisme;disponible
 1;cendrillon;ana;2005;kids;disponible
+14;le trésor;ana;1900;adventure;disponible

@@ -9,14 +9,16 @@ sys.path.append("..")
 
 
 def afficher_menu():
-    print("\n=== GESTION BIBLIOTHÈQUE ===")
+    print("\n=== GESTION BIBLIOTHÈQUE MERIEM ===")
     print("1. Ajouter un livre")
     print("2. Inscrire un membre")
     print("3. Emprunter un livre")
     print("4. Rendre un livre")
     print("5. Lister tous les livres")
-    print("6.Afficher les statistiques")
-    print("7.Sauvegarder et quitter")
+    print("6. Afficher les statistiques")
+    print("7. Sauvegarder et quitter")
+    print("8. Supprimer un livre")
+    print("9. Supprimer un membre")
 
 def main():
     biblio = Bibliotheque()
@@ -51,11 +53,11 @@ def main():
                     print(f"ce id {id} existe deja, veuiller choisir un autre")
                 except MembreInexistantError: 
                 
-                nom = input("Nom : ")
-                membre = Membre(id, nom)
-                biblio.enregistrer_membre(membre)
-                biblio.sauvegarder_membres()  
-                print("Membre inscrit avec succes")
+                    nom = input("Nom : ")
+                    membre = Membre(id, nom)
+                    biblio.enregistrer_membre(membre)
+                    biblio.sauvegarder_membres()  
+                    print("Membre inscrit avec succes")
 
         elif choix == "3":
             isbn = input("ISBN du livre : ")
@@ -85,9 +87,23 @@ def main():
             biblio.sauvegarder_donnees()
             print("Données sauvegardées.Bonne journée !")
             break
-        elif choix == "6":
+        elif choix == "6": 
             from visualisations import afficher_toutes_les_stats
             afficher_toutes_les_stats(biblio.liste_livres)
+        elif choix == "8":
+            isbn = input("ISBN du livre à supprimer : ")
+            try:
+                biblio.supprimer_livre(isbn)
+            except Exception as e:
+                print(" Erreur :", e)
+
+        elif choix == "9":
+            id = input("ID du membre à supprimer : ")
+            try:
+                biblio.supprimer_membre(id)
+            except Exception as e:
+                print("Erreur :", e)
+    
         else:
             print("Choix invalide.")
 
