@@ -78,3 +78,11 @@ Ce projet intègre :
 ```bash
 git clone https://github.com/meriemsadd/Gestion-Bibliotheque-Meriem.git
 cd Gestion-Bibliotheque-Meriem
+
+
+---
+
+##  Vidéo de Présentation
+
+Vous pouvez consulter la vidéo de démonstration du projet ici :  
+ [Voir la vidéo sur Google Drive](https://drive.google.com/file/d/1SPAwoFEgJQ9kWrnwKuzmUjqXRKv8iSgl/view?usp=drive_link)
